@@ -39,15 +39,15 @@ function AuthModal() {
   } = useAuth();
 
   useEffect(() => {
-    if (!currentUser) setOpen(true);
+    if (!currentUser) handleOpen();
   }, []);
 
   useEffect(() => {
     if (currentUser) {
-      setOpen(false);
+      handleClose();
       setAuthMode('signIn');
     } else {
-      setOpen(true);
+      handleOpen();
     }
   }, [currentUser]);
 
