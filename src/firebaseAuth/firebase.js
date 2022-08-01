@@ -26,7 +26,7 @@ export function AuthProvider({ children }) {
   const userRef = currentUser ? doc(db, 'users', currentUser.uid) : null;
 
   useEffect(() => {
-    console.log(userRef);
+    console.log(`userRef is: ${userRef}`);
     if (userRef) {
       const unsub = onSnapshot(userRef, (doc) => {
         setUserData(doc.data());
@@ -39,10 +39,8 @@ export function AuthProvider({ children }) {
     const newUserData = {
       firstName: firstName,
       lastName: lastName,
-      shoppingCart: [],
-      orders: [],
-      favorites: [],
-      address: '',
+      friends: [],
+      trips: {},
     };
 
     auth.createUserWithEmailAndPassword(email, password).then(async (cred) => {

@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 
-const colors = {
+export const colors = {
   red: '#E63946',
   offWhite: '#F1FAEE',
   blue1: '#A8DADC',
@@ -19,6 +19,9 @@ const globalTheme = createTheme({
     },
     secondary: {
       main: colors.blue2,
+    },
+    background: {
+      main: colors.offWhite,
     },
   },
 });
