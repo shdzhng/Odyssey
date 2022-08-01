@@ -46,6 +46,8 @@ function AuthModal() {
     if (currentUser) {
       setOpen(false);
       setAuthMode('signIn');
+    } else {
+      setOpen(true);
     }
   }, [currentUser]);
 
