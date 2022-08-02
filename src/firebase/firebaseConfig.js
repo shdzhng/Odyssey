@@ -2,13 +2,13 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { getFirestore } from 'firebase/firestore';
 const firebaseConfig = {
-  apiKey: 'AIzaSyCzYMDhw0q3MaRMlCrbPewIAvA4mDxWBVs',
-  authDomain: 'odyssey-2c9e3.firebaseapp.com',
-  projectId: 'odyssey-2c9e3',
-  storageBucket: 'odyssey-2c9e3.appspot.com',
-  messagingSenderId: '518944733252',
-  appId: '1:518944733252:web:bdd668beeb0bfe5539a411',
-  measurementId: 'G-G605LZ0ZS7',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
 const app = firebase.initializeApp(firebaseConfig);
