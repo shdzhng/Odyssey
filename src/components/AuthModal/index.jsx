@@ -1,14 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Button, Typography, Modal } from '@mui/material';
 import {
-  Box,
-  Button,
-  Typography,
-  Modal,
-  TextField,
-  Input,
-} from '@mui/material';
-import { ModalContainer, ModalTextField } from './authModal.styles';
-import { useAuth } from '../../firebaseAuth/firebase';
+  ModalContainer,
+  ModalTextField,
+  ModalButton,
+} from './authModal.styles';
+import { useAuth } from '../../firebase/firebaseAuth';
 
 function AuthModal() {
   const [open, setOpen] = useState(false);
@@ -28,15 +25,7 @@ function AuthModal() {
     forgotPassword: "No worries, let' fix it :)",
   };
 
-  const {
-    currentUser,
-    login,
-    signup,
-    logout,
-    resetPassword,
-    updateEmail,
-    updatePassword,
-  } = useAuth();
+  const { currentUser, login, signup, logout, resetPassword } = useAuth();
 
   useEffect(() => {
     if (!currentUser) handleOpen();
@@ -50,13 +39,6 @@ function AuthModal() {
       handleOpen();
     }
   }, [currentUser]);
-
-  ///
-  useEffect(() => {
-    console.log(authMode);
-  }, [authMode]);
-
-  ///
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -148,9 +130,9 @@ function AuthModal() {
   return (
     <div>
       {currentUser ? (
-        <Button onClick={handleSignOut}> Sign Out</Button>
+        <ModalButton onClick={handleSignOut}> Sign Out</ModalButton>
       ) : (
-        <Button onClick={handleOpen}>Open modal</Button>
+        <ModalButton onClick={handleOpen}>Sign In </ModalButton>
       )}
 
       <Modal open={open} onClose={handleClose}>

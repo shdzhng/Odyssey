@@ -1,4 +1,4 @@
-import { Box, FormControl, TextField } from '@mui/material';
+import { Box, FormControl, TextField, Button } from '@mui/material';
 import { styled } from '@mui/material';
 
 const ModalContainer = styled(FormControl)(({ theme }) => ({
@@ -15,8 +15,15 @@ const ModalContainer = styled(FormControl)(({ theme }) => ({
   flexDirection: 'column',
 }));
 
+const ModalButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.background.main,
+  position: 'relative',
+  marginLeft: '1em',
+  top: '15%',
+}));
+
 const ModalTextField = styled(TextField)(({ theme }) => ({
   marginTop: '1em',
 }));
 
-export { ModalContainer, ModalTextField };
+export { ModalContainer, ModalTextField, ModalButton };
