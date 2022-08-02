@@ -5,7 +5,7 @@ import {
   ModalTextField,
   ModalButton,
 } from './authModal.styles';
-import { useAuth } from '../../firebase';
+import { useAuth } from '../../../firebase';
 
 function AuthModal() {
   const [open, setOpen] = useState(false);
@@ -25,7 +25,15 @@ function AuthModal() {
     forgotPassword: "No worries, let' fix it :)",
   };
 
-  const { currentUser, login, signup, logout, resetPassword } = useAuth();
+  const {
+    currentUser,
+    login,
+    useRef,
+    signup,
+    toggleOnline,
+    logout,
+    resetPassword,
+  } = useAuth();
 
   useEffect(() => {
     if (!currentUser) handleOpen();
@@ -95,6 +103,7 @@ function AuthModal() {
 
   const handleSignOut = () => {
     logout();
+    toggleOnline(false, useRef);
   };
 
   const handleSignUp = () => {
@@ -124,6 +133,7 @@ function AuthModal() {
       setAuthMode('signIn');
     } else {
       login(email, password);
+      toggleOnline(true, useRef);
     }
   };
 

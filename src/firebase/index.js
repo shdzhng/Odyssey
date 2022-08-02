@@ -9,7 +9,16 @@ import {
   updateEmail,
   updatePassword,
 } from './firebaseAuth';
-import { addFriend, removeFriend, addTrip, removeTrip } from './firestore';
+import {
+  sendFriendReq,
+  removeFriend,
+  toggleOnline,
+  sendTripInv,
+  acceptTripInv,
+  addTrip,
+  removeTrip,
+  getAllUsersData,
+} from './firestore';
 
 const AuthContext = createContext();
 
@@ -20,13 +29,22 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [usersData, setUsersData] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const userRef = currentUser ? doc(db, 'users', currentUser.uid) : null;
+
+  useEffect(() => {
+    const runQuery = async () => {
+      const data = await getAllUsersData();
+      setUsersData(data);
+    };
+    runQuery();
+  }, []);
 
   useEffect(() => {
     if (userRef) {
       const unsub = onSnapshot(userRef, (doc) => {
-        console.log(doc.data());
         setUserData(doc.data());
       });
       return unsub;
@@ -52,9 +70,16 @@ export function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
 
-    /// user data
-    addFriend,
+    /// data
+    usersData,
+
+    /// user
+    userRef,
+    toggleOnline,
+    sendFriendReq,
     removeFriend,
+    sendTripInv,
+    acceptTripInv,
     addTrip,
     removeTrip,
   };
