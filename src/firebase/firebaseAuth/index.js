@@ -9,8 +9,8 @@ import {
   arrayRemove,
   onSnapshot,
 } from 'firebase/firestore';
-import app from './firebaseConfig.js';
-import { auth } from './firebaseConfig.js';
+import app from '../firebaseConfig.js';
+import { auth } from '../firebaseConfig.js';
 
 const AuthContext = React.createContext();
 
