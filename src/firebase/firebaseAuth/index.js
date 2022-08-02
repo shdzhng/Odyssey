@@ -14,9 +14,42 @@ import { auth } from '../firebaseConfig.js';
 
 const AuthContext = React.createContext();
 
+export function login(email, password) {
+  return auth.signInWithEmailAndPassword(email, password);
+}
+
+export function signup(email, password, firstName, lastName) {
+  const newUserData = {
+    firstName: firstName,
+    lastName: lastName,
+    friends: [],
+    trips: {},
+  };
+
+  auth.createUserWithEmailAndPassword(email, password).then(async (cred) => {
+    const uid = cred.user.uid;
+    await setDoc(doc(db, 'users', uid), newUserData);
+  });
+}
+
+export function logout() {
+  return auth.signOut();
+}
+export function resetPassword(email) {
+  return auth.sendPasswordResetEmail(email);
+}
+export function updateEmail(email, currentUser) {
+  return currentUser.updateEmail(email);
+}
+
+export function updatePassword(password, currentUser) {
+  return currentUser.updatePassword(password);
+}
+
 export function useAuth() {
   return useContext(AuthContext);
 }
+
 export const db = getFirestore(app);
 
 export function AuthProvider({ children }) {
@@ -34,20 +67,6 @@ export function AuthProvider({ children }) {
       return unsub;
     }
   }, [currentUser]);
-
-  function signup(email, password, firstName, lastName) {
-    const newUserData = {
-      firstName: firstName,
-      lastName: lastName,
-      friends: [],
-      trips: {},
-    };
-
-    auth.createUserWithEmailAndPassword(email, password).then(async (cred) => {
-      const uid = cred.user.uid;
-      await setDoc(doc(db, 'users', uid), newUserData);
-    });
-  }
 
   async function addFavorite(item) {
     await updateDoc(userRef, {
@@ -72,6 +91,20 @@ export function AuthProvider({ children }) {
 
   function login(email, password) {
     return auth.signInWithEmailAndPassword(email, password);
+  }
+
+  function signup(email, password, firstName, lastName) {
+    const newUserData = {
+      firstName: firstName,
+      lastName: lastName,
+      friends: [],
+      trips: {},
+    };
+
+    auth.createUserWithEmailAndPassword(email, password).then(async (cred) => {
+      const uid = cred.user.uid;
+      await setDoc(doc(db, 'users', uid), newUserData);
+    });
   }
 
   function logout() {

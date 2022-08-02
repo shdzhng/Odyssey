@@ -5,7 +5,7 @@ import {
   ModalTextField,
   ModalButton,
 } from './authModal.styles';
-import { useAuth } from '../../firebase/firebaseAuth';
+import { useAuth } from '../../firebase';
 
 function AuthModal() {
   const [open, setOpen] = useState(false);

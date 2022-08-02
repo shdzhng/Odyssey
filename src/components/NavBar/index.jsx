@@ -58,8 +58,6 @@ export default function PrimarySearchAppBar() {
       <MenuItem onClick={handleMenuClose}>My account</MenuItem>
     </Menu>
   );
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
@@ -67,7 +65,6 @@ export default function PrimarySearchAppBar() {
         vertical: 'top',
         horizontal: 'right',
       }}
-      id={mobileMenuId}
       keepMounted
       transformOrigin={{
         vertical: 'top',
@@ -143,7 +140,6 @@ export default function PrimarySearchAppBar() {
             <IconButton
               size="large"
               aria-label="show more"
-              aria-controls={mobileMenuId}
               aria-haspopup="true"
               onClick={handleMobileMenuOpen}
               color="inherit"
@@ -153,8 +149,8 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
+      {/* {renderMobileMenu}
+      {renderMenu} */}
     </Box>
   );
 }
