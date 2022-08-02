@@ -72,7 +72,7 @@ export default function SocialButton() {
         </DrawerHeader>
         <Typography variant="caption">{`My ID: ${currentUser.uid}`}</Typography>
 
-        <SearchBar />
+        <SearchBar usersData={usersData} />
 
         <Divider />
         <Typography>Friends Online</Typography>

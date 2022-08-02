@@ -12,10 +12,11 @@ import {
   Typography,
 } from '@mui/material';
 
-export default function SearchBar() {
-  const { usersData } = useAuth();
+export default function SearchBar({ usersData }) {
   const [open, setOpen] = useState(false);
-  console.log(usersData);
+
+  const { sendFriendReq, removeFriend } = useAuth();
+  
   const handleInputChange = ({ target }) => {
     if (target?.value?.length > 0) {
       setOpen(true);
