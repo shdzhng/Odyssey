@@ -1,4 +1,6 @@
 import React, { useContext, createContext, useState, useEffect } from 'react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { auth, db } from './firebaseConfig';
 import {
   login,
   signup,
@@ -7,17 +9,7 @@ import {
   updateEmail,
   updatePassword,
 } from './firebaseAuth';
-import {
-  doc,
-  setDoc,
-  getFirestore,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  onSnapshot,
-} from 'firebase/firestore';
-import { auth } from './firebaseConfig';
-import { db } from './firebaseAuth';
+import { addFriend, removeFriend, addTrip, removeTrip } from './firestore';
 
 const AuthContext = createContext();
 
@@ -32,9 +24,9 @@ export function AuthProvider({ children }) {
   const userRef = currentUser ? doc(db, 'users', currentUser.uid) : null;
 
   useEffect(() => {
-    console.log(`userRef is: ${userRef}`);
     if (userRef) {
       const unsub = onSnapshot(userRef, (doc) => {
+        console.log(doc.data());
         setUserData(doc.data());
       });
       return unsub;
@@ -52,20 +44,19 @@ export function AuthProvider({ children }) {
 
   const value = {
     //authentication
+    currentUser,
     login,
     signup,
     logout,
-    currentUser,
     resetPassword,
     updateEmail,
     updatePassword,
 
     /// user data
-    // userData,
-    // addFavorite,
-    // removeFavorite,
-    // addToShoppingCart,
-    // removeFromShoppingCart,
+    addFriend,
+    removeFriend,
+    addTrip,
+    removeTrip,
   };
 
   return (
@@ -74,24 +65,3 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
-
-// async function addFavorite(item) {
-//   await updateDoc(userRef, {
-//     favorites: arrayUnion(item.name),
-//   });
-// }
-// async function removeFavorite(item) {
-//   await updateDoc(userRef, {
-//     favorites: arrayRemove(item.name),
-//   });
-// }
-// async function addToShoppingCart(item) {
-//   await updateDoc(userRef, {
-//     shoppingCart: arrayUnion(item.name),
-//   });
-// }
-// async function removeFromShoppingCart(item) {
-//   await updateDoc(userRef, {
-//     shoppingCart: arrayRemove(item.name),
-//   });
-// }
