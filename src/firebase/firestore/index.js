@@ -1,11 +1,4 @@
-import {
-  updateDoc,
-  arrayUnion,
-  doc,
-  arrayRemove,
-  getDocs,
-  collection,
-} from 'firebase/firestore';
+import { updateDoc, arrayUnion, doc, arrayRemove } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
 async function toggleOnline(command, userRef) {
@@ -59,11 +52,11 @@ async function acceptFriendReq(targetUID, userRef, reqType) {
         reqType,
       }),
     });
-
+    reqType = 'accepted';
     await updateDoc(accountRef, {
       friends: arrayUnion({
         uid: targetUID,
-        reqType: 'accepted',
+        reqType,
       }),
     });
   };
