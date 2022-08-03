@@ -24,7 +24,7 @@ import SearchBar from './SearchBar';
 const drawerWidth = 240;
 
 export default function SocialButton() {
-  const { currentUser, usersData, logout } = useAuth();
+  const { currentUser, usersData, logout, userRef, userData } = useAuth();
 
   const [open, setOpen] = React.useState(false);
 
@@ -72,7 +72,7 @@ export default function SocialButton() {
         </DrawerHeader>
         <Typography variant="caption">{`My ID: ${currentUser.uid}`}</Typography>
 
-        <SearchBar usersData={usersData} />
+        <SearchBar usersData={usersData} userRef={userRef} />
 
         <Divider />
         <Typography>Friends Online</Typography>

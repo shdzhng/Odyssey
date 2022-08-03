@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useState, useEffect } from 'react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, collection, query } from 'firebase/firestore';
 import { auth, db } from './firebaseConfig';
 import {
   login,
@@ -35,11 +35,16 @@ export function AuthProvider({ children }) {
   const userRef = currentUser ? doc(db, 'users', currentUser.uid) : null;
 
   useEffect(() => {
-    const runQuery = async () => {
-      const data = await getAllUsersData();
-      setUsersData(data);
-    };
-    runQuery();
+    const q = query(collection(db, 'users'));
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      const usersData = [];
+      querySnapshot.forEach((doc) => {
+        usersData.push(doc.data());
+      });
+      setUsersData(usersData);
+    });
+
+    return unsub;
   }, []);
 
   useEffect(() => {
