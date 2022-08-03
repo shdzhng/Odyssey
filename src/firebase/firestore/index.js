@@ -8,13 +8,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
-async function getAllUsersData() {
-  const returnedUsersData = [];
-  const data = await getDocs(collection(db, 'users'));
-  data.forEach((doc) => returnedUsersData.push(doc.data()));
-  return returnedUsersData;
-}
-
 async function toggleOnline(command, userRef) {
   await updateDoc(userRef, {
     online: command,
@@ -28,7 +21,7 @@ async function sendFriendReq(targetUID, userRef) {
   const handleReq = async (accountRef, targetUID, reqType) => {
     await updateDoc(accountRef, {
       friends: arrayUnion({
-        targetUID,
+        uid: targetUID,
         reqType,
       }),
     });
@@ -38,15 +31,26 @@ async function sendFriendReq(targetUID, userRef) {
   handleReq(targetRef, userUID, 'received');
 }
 
+async function removeFriend(targetUID, userRef, reqType) {
+  const targetRef = doc(db, 'users', targetUID);
+  const userUID = userRef.id;
+
+  const handleReq = async (accountRef, targetUID, reqType) => {
+    await updateDoc(accountRef, {
+      friends: arrayRemove({
+        uid: targetUID,
+        reqType,
+      }),
+    });
+  };
+
+  handleReq(userRef, targetUID, reqType);
+  handleReq(targetRef, userUID, reqType);
+}
+
 async function acceptFriendReq(item, userRef) {
   await updateDoc(userRef, {
     // friends: arrayUnion(item.name),
-  });
-}
-
-async function removeFriend(item, userRef) {
-  await updateDoc(userRef, {
-    // friends: arrayRemove(item.name),
   });
 }
 
@@ -82,5 +86,4 @@ export {
   addTrip,
   removeTrip,
   toggleOnline,
-  getAllUsersData,
 };

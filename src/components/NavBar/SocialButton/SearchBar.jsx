@@ -1,24 +1,17 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../../firebase';
-import {
-  TextField,
-  Stack,
-  Autocomplete,
-  ListItem,
-  Box,
-  Popper,
-  Paper,
-  Button,
-  Typography,
-} from '@mui/material';
+import { TextField, Stack, Box, Button } from '@mui/material';
 
-export default function SearchBar({ userRef, usersData }) {
-  const { sendFriendReq, removeFriend } = useAuth();
-  const [targetUID, setTargetUID] = useState('');
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const uidMap = usersData && usersData.map((user) => user.uid);
+export default function SearchBar({
+  error,
+  setError,
+  errorMessage,
+  setErrorMessage,
+  targetUID,
+  setTargetUID,
+}) {
+  const { usersData, userRef, userData, friendsList, sendFriendReq } =
+    useAuth();
 
   const handleInputChange = ({ target }) => {
     setTargetUID(target.value);
@@ -26,12 +19,32 @@ export default function SearchBar({ userRef, usersData }) {
 
   const handleAddFriend = (e) => {
     e.preventDefault();
-    if (uidMap.includes(targetUID)) {
+    const allUIDMap = usersData && usersData.map((user) => user.uid);
+
+    if (userData.uid === targetUID) {
+      setError(true);
+      setErrorMessage('Cannot Add Self');
+      return;
+    }
+
+    if (friendsList[targetUID]) {
+      setError(true);
+      setErrorMessage(
+        `friend request already ${friendsList[targetUID].reqType}`
+      );
+      return;
+    }
+
+    if (allUIDMap.includes(targetUID)) {
       sendFriendReq(targetUID, userRef);
+      setError(false);
+      setErrorMessage('');
     } else {
       setError(true);
       setErrorMessage('User Not Found');
     }
+
+    setTargetUID('');
   };
 
   return (
@@ -57,41 +70,3 @@ export default function SearchBar({ userRef, usersData }) {
     </Stack>
   );
 }
-
-//  {
-//    !usersData ? null : (
-//      <Autocomplete
-//        open={open}
-//        // freeSolo
-//        includeInputInList={true}
-//        noOptionsText={'user not found'}
-//        clearOnBlur={false}
-//        disableCloseOnSelect
-//        onInputChange={(e) => handleInputChange(e)}
-//        filterSelectedOptions={true}
-//        options={usersData}
-//        renderInput={(params) => {
-//          return <TextField {...params} label="Search Friends By ID/Name" />;
-//        }}
-//        getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
-//        renderOption={(props, option) => {
-//          return (
-//            <ListItem
-//              {...props}
-//              sx={{ display: 'flex', flexDirection: 'column' }}
-//            >
-//              <Typography>{`${option.firstName} ${option.lastName}`}</Typography>
-
-//              <Button
-//                onClick={(e, option) => {
-//                  handleAddFriend(e, option);
-//                }}
-//              >
-//                Add Friend
-//              </Button>
-//            </ListItem>
-//          );
-//        }}
-//      />
-//    );
-//  }
