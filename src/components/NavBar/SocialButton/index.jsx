@@ -1,5 +1,4 @@
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Drawer,
@@ -20,25 +19,52 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { DrawerHeader } from './socialButton.styles';
 import { useAuth } from '../../../firebase';
 import SearchBar from './SearchBar';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 export default function SocialButton() {
-  const { currentUser, usersData, logout, userRef, userData } = useAuth();
-
+  const {
+    currentUser,
+    logout,
+    userRef,
+    friendsOnline,
+    friendsOffline,
+    incomingFriends,
+    outgoingFriends,
+    removeFriend,
+  } = useAuth();
   const [open, setOpen] = React.useState(false);
+  const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [targetUID, setTargetUID] = useState('');
 
-  const handleSignOut = () => {
-    logout();
+  const handleSignOut = () => logout();
+  const handleDrawerOpen = () => setOpen(true);
+  const handleDrawerClose = () => setOpen(false);
+
+  const handleRemoveFriend = (targetUID, userRef, reqType) => {
+    removeFriend(targetUID, userRef, reqType);
+    setError(false);
+    setTargetUID('');
+    setErrorMessage('');
   };
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const renderFriends = (list) =>
+    list.map((friend) => {
+      return (
+        <ListItem key={friend.uid} sx={{ display: 'flex' }} disablePadding>
+          <Typography>{`${friend.firstName} ${friend.lastName}`}</Typography>
+          <Button
+            onClick={() => {
+              handleRemoveFriend(friend.uid, userRef, friend.reqType);
+            }}
+          >
+            x
+          </Button>
+        </ListItem>
+      );
+    });
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -72,20 +98,28 @@ export default function SocialButton() {
         </DrawerHeader>
         <Typography variant="caption">{`My ID: ${currentUser.uid}`}</Typography>
 
-        <SearchBar usersData={usersData} userRef={userRef} />
-
+        <SearchBar
+          error={error}
+          setError={setError}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          targetUID={targetUID}
+          setTargetUID={setTargetUID}
+        />
+        <Divider />
+        <Typography>Incoming Friend Request</Typography>
+        <List>{renderFriends(incomingFriends)}</List>
         <Divider />
         <Typography>Friends Online</Typography>
-        <List>
-          <ListItem disablePadding></ListItem>
-        </List>
-
-        <Typography>Friends Offline</Typography>
-        <List>
-          <ListItem disablePadding></ListItem>
-        </List>
+        <List>{renderFriends(friendsOnline)}</List>
         <Divider />
-
+        <Typography>Friends Offline</Typography>
+        <List>{renderFriends(friendsOffline)}</List>
+        <Divider />
+        <Typography>Friend Requests Sent</Typography>
+        <List disablePadding>
+          <List>{renderFriends(outgoingFriends)}</List>
+        </List>
         <Button onClick={handleSignOut}>Sign Out</Button>
       </Drawer>
     </Box>
