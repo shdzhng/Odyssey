@@ -33,6 +33,7 @@ export default function SocialButton() {
     incomingFriends,
     outgoingFriends,
     removeFriend,
+    acceptFriendReq,
   } = useAuth();
   const [open, setOpen] = React.useState(false);
   const [error, setError] = useState(false);
@@ -50,17 +51,30 @@ export default function SocialButton() {
     setErrorMessage('');
   };
 
+  const handleAcceptFriend = (targetUID, userRef, reqType) => {
+    acceptFriendReq(targetUID, userRef, reqType);
+  };
+
   const renderFriends = (list) =>
     list.map((friend) => {
       return (
         <ListItem key={friend.uid} sx={{ display: 'flex' }} disablePadding>
           <Typography>{`${friend.firstName} ${friend.lastName}`}</Typography>
+          {friend.reqType === 'received' && (
+            <Button
+              onClick={() => {
+                handleAcceptFriend(friend.uid, userRef, friend.reqType);
+              }}
+            >
+              Accept
+            </Button>
+          )}
           <Button
             onClick={() => {
               handleRemoveFriend(friend.uid, userRef, friend.reqType);
             }}
           >
-            x
+            Remove
           </Button>
         </ListItem>
       );

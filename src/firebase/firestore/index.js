@@ -48,10 +48,28 @@ async function removeFriend(targetUID, userRef, reqType) {
   handleReq(targetRef, userUID, reqType);
 }
 
-async function acceptFriendReq(item, userRef) {
-  await updateDoc(userRef, {
-    // friends: arrayUnion(item.name),
-  });
+async function acceptFriendReq(targetUID, userRef, reqType) {
+  const targetRef = doc(db, 'users', targetUID);
+  const userUID = userRef.id;
+
+  const handleReq = async (accountRef, targetUID, reqType) => {
+    await updateDoc(accountRef, {
+      friends: arrayRemove({
+        uid: targetUID,
+        reqType,
+      }),
+    });
+
+    await updateDoc(accountRef, {
+      friends: arrayUnion({
+        uid: targetUID,
+        reqType: 'accepted',
+      }),
+    });
+  };
+
+  handleReq(userRef, targetUID, reqType);
+  handleReq(targetRef, userUID, reqType);
 }
 
 async function sendTripInv(item, userRef) {
@@ -81,6 +99,7 @@ async function removeTrip(item, userRef) {
 export {
   sendFriendReq,
   removeFriend,
+  acceptFriendReq,
   sendTripInv,
   acceptTripInv,
   addTrip,
