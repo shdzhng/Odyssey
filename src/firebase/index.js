@@ -14,6 +14,7 @@ import {
   removeFriend,
   toggleOnline,
   sendTripInv,
+  acceptFriendReq,
   acceptTripInv,
   addTrip,
   removeTrip,
@@ -111,6 +112,7 @@ export function AuthProvider({ children }) {
     friendsOffline,
     incomingFriends,
     outgoingFriends,
+    acceptFriendReq,
 
     /// user
     userRef,
