@@ -103,10 +103,10 @@ export function AuthProvider({ children }) {
     resetPassword,
     updateEmail,
     updatePassword,
+    userRef,
 
-    /// data
-    usersData,
-    userData,
+    ///user data
+
     friendsList,
     friendsOnline,
     friendsOffline,
@@ -114,11 +114,16 @@ export function AuthProvider({ children }) {
     outgoingFriends,
     acceptFriendReq,
 
-    /// user
-    userRef,
+    ///all data
+    usersData,
+    userData,
+
+    //friends functionality
     toggleOnline,
     sendFriendReq,
     removeFriend,
+
+    // trip functionality
     sendTripInv,
     acceptTripInv,
     addTrip,
