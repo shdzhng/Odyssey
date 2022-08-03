@@ -1,12 +1,12 @@
 import {
   updateDoc,
   arrayUnion,
+  doc,
   arrayRemove,
   getDocs,
   collection,
 } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import { useAuth } from '../index';
 
 async function getAllUsersData() {
   const returnedUsersData = [];
@@ -21,10 +21,21 @@ async function toggleOnline(command, userRef) {
   });
 }
 
-async function sendFriendReq(item, userRef) {
-  await updateDoc(userRef, {
-    // friends: arrayUnion(item.name),
-  });
+async function sendFriendReq(targetUID, userRef) {
+  const targetRef = doc(db, 'users', targetUID);
+  const userUID = userRef.id;
+
+  const handleReq = async (accountRef, targetUID, reqType) => {
+    await updateDoc(accountRef, {
+      friends: arrayUnion({
+        targetUID,
+        reqType,
+      }),
+    });
+  };
+
+  handleReq(userRef, targetUID, 'sent');
+  handleReq(targetRef, userUID, 'received');
 }
 
 async function acceptFriendReq(item, userRef) {
