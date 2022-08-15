@@ -52,7 +52,6 @@ async function acceptFriendReq(targetUID, userRef, reqType) {
   const userUID = userRef.id;
 
   const handleReq = async (accountRef, targetUID, reqType) => {
-    console.log(reqType);
     await updateDoc(accountRef, {
       friends: arrayRemove({
         uid: targetUID,
@@ -76,23 +75,11 @@ async function createTrip(payload, userRef) {
   await setDoc(doc(db, 'trips', `${payload.createdOn}`), payload);
 }
 
-async function sendTripInv(item, userRef) {
-  await updateDoc(userRef, {
-    // trips: arrayUnion(item.name),
-  });
-}
+async function sendTripInv(tripId, userId) {}
 
-async function acceptTripInv(item, userRef) {
-  await updateDoc(userRef, {
-    // trips: arrayUnion(item.name),
-  });
-}
+async function acceptTripInv(item, userRef) {}
 
-async function removeTrip(item, userRef) {
-  await updateDoc(userRef, {
-    // trips: arrayRemove(item.name),
-  });
-}
+async function removeTrip(item, userRef) {}
 
 export {
   sendFriendReq,
