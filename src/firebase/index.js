@@ -16,7 +16,7 @@ import {
   sendTripInv,
   acceptFriendReq,
   acceptTripInv,
-  addTrip,
+  createTrip,
   removeTrip,
 } from './firestore';
 
@@ -106,7 +106,6 @@ export function AuthProvider({ children }) {
     userRef,
 
     ///user data
-
     friendsList,
     friendsOnline,
     friendsOffline,
@@ -126,7 +125,7 @@ export function AuthProvider({ children }) {
     // trip functionality
     sendTripInv,
     acceptTripInv,
-    addTrip,
+    createTrip,
     removeTrip,
   };
 

@@ -2,10 +2,9 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import { getFirestore } from 'firebase/firestore';
 import {
-  browserLocalPersistence,
-  inMemoryPersistence,
-  indexedDBLocalPersistence,
-  initializeAuth,
+  getAuth,
+  setPersistence,
+  browserSessionPersistence,
 } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -19,9 +18,7 @@ const firebaseConfig = {
 };
 
 const app = firebase.initializeApp(firebaseConfig);
-
 export const db = getFirestore(app);
-
 export const auth = app.auth();
 
 export default app;
