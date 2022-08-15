@@ -1,4 +1,10 @@
-import { updateDoc, arrayUnion, doc, arrayRemove } from 'firebase/firestore';
+import {
+  updateDoc,
+  arrayUnion,
+  doc,
+  arrayRemove,
+  setDoc,
+} from 'firebase/firestore';
 import { db } from '../firebaseConfig';
 
 async function toggleOnline(command, userRef) {
@@ -46,6 +52,7 @@ async function acceptFriendReq(targetUID, userRef, reqType) {
   const userUID = userRef.id;
 
   const handleReq = async (accountRef, targetUID, reqType) => {
+    console.log(reqType);
     await updateDoc(accountRef, {
       friends: arrayRemove({
         uid: targetUID,
@@ -62,7 +69,11 @@ async function acceptFriendReq(targetUID, userRef, reqType) {
   };
 
   handleReq(userRef, targetUID, reqType);
-  handleReq(targetRef, userUID, reqType);
+  handleReq(targetRef, userUID, 'sent');
+}
+
+async function createTrip(payload, userRef) {
+  await setDoc(doc(db, 'trips', `${payload.createdOn}`), payload);
 }
 
 async function sendTripInv(item, userRef) {
@@ -72,12 +83,6 @@ async function sendTripInv(item, userRef) {
 }
 
 async function acceptTripInv(item, userRef) {
-  await updateDoc(userRef, {
-    // trips: arrayUnion(item.name),
-  });
-}
-
-async function addTrip(item, userRef) {
   await updateDoc(userRef, {
     // trips: arrayUnion(item.name),
   });
@@ -95,7 +100,7 @@ export {
   acceptFriendReq,
   sendTripInv,
   acceptTripInv,
-  addTrip,
+  createTrip,
   removeTrip,
   toggleOnline,
 };
