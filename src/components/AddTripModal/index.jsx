@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useAuth } from '../../firebase';
-import TextField from '@mui/material/TextField';
+import { TextField, Autocomplete } from '@mui/material';
 
 const style = {
   display: 'flex',
@@ -27,13 +27,13 @@ function AddTripModal() {
   const [description, setDescription] = useState('');
   const [invitation, setInvitation] = useState([]);
   const [error, setError] = useState({});
-  const { userData, createTrip, friendsList } = useAuth();
+  const { userData, createTrip, friendsData } = useAuth();
 
   const getDate = (prop) => {
     const today = new Date();
     const yyyy = today.getFullYear();
     let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1!
+    let mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1
 
     if (dd < 10) dd = '0' + dd;
     if (mm < 10) mm = '0' + mm;
@@ -71,6 +71,17 @@ function AddTripModal() {
     }
   };
 
+  const handleInviteChange = (value) => {
+    if (value[0]?.uid && !invitation.includes(value[0].uid))
+      setInvitation((prev) => {
+        return [...prev, value[0].uid];
+      });
+  };
+
+  useEffect(() => {
+    console.log(invitation);
+  }, [invitation]);
+
   const handleSubmit = () => {
     if (name === '' || date === '' || description === '') {
       handleInputError();
@@ -93,15 +104,6 @@ function AddTripModal() {
     createTrip(tripInfo);
     resetInput();
   };
-
-  // console.log(
-  //   Object.entries(friendsList).map((friend) => {
-  //     return {
-  //       id: friend[0],
-  //       name: `${friend[1].firstName} ${friend[1].lastName}`,
-  //     };
-  //   })
-  // );
 
   return (
     <div>
@@ -149,6 +151,22 @@ function AddTripModal() {
             helperText={error['date'] ? error['date'] : null}
             value={date}
             onChange={(e) => setDate(e.target.value)}
+          />
+          <Autocomplete
+            multiple
+            id="tags-standard"
+            options={friendsData}
+            onChange={(e, newValue) => handleInviteChange(newValue)}
+            getOptionLabel={({ firstName, lastName }) =>
+              `${firstName} ${lastName}`
+            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="standard"
+                label="Invite Friends"
+              />
+            )}
           />
           <Button onClick={handleSubmit}> Create </Button>
           <Button

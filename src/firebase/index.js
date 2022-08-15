@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [usersData, setUsersData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [friendsList, setFriendsList] = useState({});
+  const [friendsData, setFriendsData] = useState({});
   const [friendsOnline, setFriendsOnline] = useState([]);
   const [friendsOffline, setFriendsOffline] = useState([]);
   const [incomingFriends, setIncomingFriends] = useState([]);
@@ -42,30 +42,33 @@ export function AuthProvider({ children }) {
   //update friends data
   useEffect(() => {
     if (userData) {
-      const returnedList = {};
+      const returnedList = [];
       userData.friends.forEach(({ uid, reqType }) => {
         const friendData = Object.values(usersData).filter(
           (user) => user.uid === uid
         )[0];
 
-        returnedList[uid] = { reqType, ...friendData };
+        returnedList.push({ uid, reqType, ...friendData });
       });
-      setFriendsList(returnedList);
+      setFriendsData(returnedList);
     }
   }, [userData]);
 
   //prune friends list into two branches: online and offline
+
   useEffect(() => {
-    const friends = Object.values(friendsList);
+    const friends = Object.values(friendsData);
+
     setFriendsOnline(
       friends.filter(({ online, reqType }) => online && reqType === 'accepted')
     );
+
     setFriendsOffline(
       friends.filter(({ online, reqType }) => !online && reqType === 'accepted')
     );
     setOutgoingFriends(friends.filter(({ reqType }) => reqType === 'sent'));
     setIncomingFriends(friends.filter(({ reqType }) => reqType === 'received'));
-  }, [friendsList]);
+  }, [friendsData]);
 
   useEffect(() => {
     const q = query(collection(db, 'users'));
@@ -106,7 +109,7 @@ export function AuthProvider({ children }) {
     userRef,
 
     ///user data
-    friendsList,
+    friendsData,
     friendsOnline,
     friendsOffline,
     incomingFriends,
