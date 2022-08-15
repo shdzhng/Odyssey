@@ -21,7 +21,7 @@ function AuthModal() {
 
   const messageMap = {
     signUp: 'Register Your Account',
-    signIn: 'Welcome Back :)',
+    signIn: 'Welcome Back, Adventurer :)',
     forgotPassword: "No worries, let' fix it :)",
   };
 
@@ -206,9 +206,8 @@ function AuthModal() {
               helperText={formError['password'] ? formError['password'] : false}
             ></ModalTextField>
           ) : null}
-
-          <Button onClick={handleSignUp}>Sign Up</Button>
           <Button onClick={handleSignIn}>Sign In</Button>
+          <Button onClick={handleSignUp}>Sign Up</Button>
           <Button onClick={handleForgotPassword}>Forgot Password</Button>
         </ModalContainer>
       </Modal>

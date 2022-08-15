@@ -23,6 +23,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "jest": {
+    "testEnvironment": "./__test-utils__/custom-jest-environment.js"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
