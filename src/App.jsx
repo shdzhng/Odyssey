@@ -1,7 +1,7 @@
 import './App.css';
+import { useEffect } from 'react';
 import { ThemeProvider } from '@emotion/react';
 import globalTheme from './constants/globalTheme';
-// import { AuthProvider } from './firebase/firebaseAuth';
 import { AuthProvider } from './firebase';
 import Home from './scenes/Home';
 
