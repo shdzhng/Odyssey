@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useAuth } from '../../firebase';
 import { TextField, Autocomplete } from '@mui/material';
+import getDate from '../../hooks/getDate';
 
 const style = {
   display: 'flex',
@@ -27,20 +28,7 @@ function AddTripModal() {
   const [description, setDescription] = useState('');
   const [invitation, setInvitation] = useState([]);
   const [error, setError] = useState({});
-  const { userData, createTrip, friendsData } = useAuth();
-
-  const getDate = (prop) => {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1; //January is 0 so need to add 1 to make it 1
-
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
-
-    if (prop === 'min') return `${yyyy}-${mm}-${dd}`;
-    if (prop === 'max') return `${yyyy + 10}-${mm}-${dd}`;
-  };
+  const { userData, createTrip, friendsData, currentUser } = useAuth();
 
   const resetInput = () => {
     setName('');
@@ -78,10 +66,6 @@ function AddTripModal() {
       });
   };
 
-  useEffect(() => {
-    console.log(invitation);
-  }, [invitation]);
-
   const handleSubmit = () => {
     if (name === '' || date === '' || description === '') {
       handleInputError();
@@ -93,7 +77,8 @@ function AddTripModal() {
       date: new Date(date).getTime(),
       description,
       invitation,
-      createdOn: new Date().getTime(),
+      accepted: [],
+      id: new Date().getTime(),
       createdBy: {
         uid: userData.uid,
         firstName: userData.firstName,
