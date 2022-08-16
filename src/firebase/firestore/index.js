@@ -71,8 +71,23 @@ async function acceptFriendReq(targetUID, userRef, reqType) {
   handleReq(targetRef, userUID, 'sent');
 }
 
-async function createTrip(payload, userRef) {
-  await setDoc(doc(db, 'trips', `${payload.createdOn}`), payload);
+async function createTrip(payload) {
+  const { invitation, id, createdBy } = payload;
+
+  const updateTrip = async (userId, tripId) => {
+    const userRef = doc(db, 'users', userId);
+    await updateDoc(userRef, {
+      trips: arrayUnion(tripId),
+    });
+  };
+
+  await setDoc(doc(db, 'trips', `${payload.id}`), payload);
+
+  updateTrip(createdBy.uid, id);
+
+  for (const userId of invitation) {
+    updateTrip(userId, id);
+  }
 }
 
 async function sendTripInv(tripId, userId) {}
