@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   AppBar,
   Box,
@@ -23,10 +23,29 @@ export default function PrimarySearchAppBar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  const { currentUser } = useAuth();
+  const { currentUser, toggleOnline, userRef } = useAuth();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  // tab close listener to logout user
+  useEffect(() => {
+    const handleTabClose = (event) => {
+      event.preventDefault();
+      toggleOnline(false, userRef);
+      return (event.returnValue = 'Are you sure you want to exit?');
+    };
+
+    window.addEventListener('beforeunload', handleTabClose);
+
+    return () => {
+      window.addEventListener('beforeunload', handleTabClose);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (userRef) toggleOnline(true, userRef);
+  }, [userRef]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);

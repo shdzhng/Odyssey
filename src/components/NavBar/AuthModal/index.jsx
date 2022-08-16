@@ -28,12 +28,18 @@ function AuthModal() {
   const {
     currentUser,
     login,
-    useRef,
+    userRef,
     signup,
     toggleOnline,
     logout,
     resetPassword,
   } = useAuth();
+
+  useEffect(() => {
+    return () => {
+      toggleOnline(false, userRef);
+    };
+  }, []);
 
   useEffect(() => {
     if (!currentUser) handleOpen();

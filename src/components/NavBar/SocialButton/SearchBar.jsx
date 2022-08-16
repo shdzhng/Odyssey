@@ -19,21 +19,21 @@ export default function SearchBar({
 
   const handleAddFriend = (e) => {
     e.preventDefault();
-    const allUIDMap = usersData && usersData.map((user) => user.uid);
+    const allUIDMap = usersData && usersData.map((user) => user?.uid);
 
-    if (userData.uid === targetUID) {
+    if (userData?.uid === targetUID) {
       setError(true);
       setErrorMessage('Cannot Add Self');
       return;
     }
 
-    if (friendsList[targetUID]) {
-      setError(true);
-      setErrorMessage(
-        `friend request already ${friendsList[targetUID].reqType}`
-      );
-      return;
-    }
+    // if (friendsList[targetUID]) {
+    //   setError(true);
+    //   setErrorMessage(
+    //     `friend request already ${friendsList[targetUID].reqType}`
+    //   );
+    //   return;
+    // }
 
     if (allUIDMap.includes(targetUID)) {
       sendFriendReq(targetUID, userRef);

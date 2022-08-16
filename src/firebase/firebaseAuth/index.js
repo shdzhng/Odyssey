@@ -15,7 +15,8 @@ export function signup(email, password, firstName, lastName) {
       uid,
       online: true,
       friends: [],
-      trips: [],
+      tripsInvite: [],
+      tripsAccepted: [],
     };
     await setDoc(doc(db, 'users', uid), newUserData);
   });
