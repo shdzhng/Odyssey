@@ -39,7 +39,7 @@ export default function PrimarySearchAppBar() {
     window.addEventListener('beforeunload', handleTabClose);
 
     return () => {
-      window.addEventListener('beforeunload', handleTabClose);
+      window.removeEventListener('beforeunload', handleTabClose);
     };
   }, []);
 
